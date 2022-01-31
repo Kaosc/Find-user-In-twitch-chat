@@ -1,5 +1,5 @@
 # Find User In Twitch Chat
-Verify whether the user is on the viewer list and get notifications while channel is live.
+Verify whether the user is on the viewer list on twitch channels and get notifications.
 
 # Pips
 - pip install selenium
