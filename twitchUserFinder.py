@@ -93,7 +93,8 @@ class Twitch:
     def soloCheck(self,channel,nickname):
         os.system("cls")
         
-        timer, count = 0
+        timer = 0 
+        count = 0
         founded = False
         self.nickname = nickname
         self.channel = channel
@@ -148,8 +149,8 @@ twitch = Twitch()
 
 while True:
     print("")
-    print("%s - - - TWITCH USER FINDER - - - \n %s" % (fg(56), attr(0)))
-    opt = input("""%s [1] - Find in following channels \n [2] - Search in a spesific channel (Loop) \n [3] - Exit \n\n Enter Number:  %s""" % (fg(56), attr(0)))
+    print("%s - - - TWITCH USER FINDER - - - \n %s" % (fg(57), attr(0)))
+    opt = input("""%s [1] - Find in following channels \n [2] - Search in a spesific channel (Loop) \n [3] - Exit \n\n Enter Number:  %s""" % (fg(57), attr(0)))
     if opt == "3":
         sys.exit()
     elif opt == "2":
