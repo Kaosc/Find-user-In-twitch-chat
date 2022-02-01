@@ -68,7 +68,7 @@ class Twitch:
 
             print(f"%s\n - SEARCHING THE USER%s" % (fg(3), attr(0)))
             time.sleep(3)
-            self.browser.find_element_by_xpath('//*[@name="viewers-filter"]').send_keys(self.nickname)
+            self.browser.find_element_by_xpath('//*[@name="viewers-filter"]').send_keys(self.nickname.lower())
             print(f"%s - RESULTS ARE LOADING%s" % (fg(3), attr(0)))
             time.sleep(2)
 
