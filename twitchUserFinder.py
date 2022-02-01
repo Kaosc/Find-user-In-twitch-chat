@@ -40,8 +40,8 @@ class Twitch:
         count = 0
         founded = False
         channels = []
-        subject = "THE USER CONFIRMED"
-        content = f"channels[count]"
+        subject = f"THE USER CONFIRMED"
+        content = f"{channels[count]}"
         collectLink = f"https://twitch-tools.rootonline.de/followinglist_viewer.php?username={self.nickname}"
 
         self.browser = webdriver.Chrome("driver/chromedriver.exe", chrome_options=self.browserProfile)
@@ -93,20 +93,18 @@ class Twitch:
     def soloCheck(self,channel,nickname):
         os.system("cls")
         
-        timer = 0 
         count = 0
         founded = False
         self.nickname = nickname
         self.channel = channel
         self.browser = webdriver.Chrome("driver/chromedriver.exe", chrome_options=self.browserProfile)
 
-        subject = "THE USER CONFIRMED ON CHANNEL"
+        subject = f"THE USER CONFIRMED AT {self.channel}"
         content = f"https://www.twitch.tv/{self.channel}"
-        link = f"https://www.twitch.tv/{self.channel}"
 
         while True:
             os.system("cls")
-            self.browser.get(link)
+            self.browser.get(f"https://www.twitch.tv/{self.channel}")
             print(f"%s\n - CONNECTED TO CHANNEL%s" % (fg(3), attr(0)))
             time.sleep(2)
             
@@ -119,7 +117,7 @@ class Twitch:
                 
             print(f"%s - SEARCHING THE USER%s" % (fg(3), attr(0)))
             time.sleep(2)
-            self.browser.find_element_by_xpath('//*[@name="viewers-filter"]').send_keys(self.nickname)
+            self.browser.find_element_by_xpath('//*[@name="viewers-filter"]').send_keys(self.nickname.lower())
             print(f"%s - RESULTS ARE LOADING%s" % (fg(3), attr(0)))
             time.sleep(2)
 
