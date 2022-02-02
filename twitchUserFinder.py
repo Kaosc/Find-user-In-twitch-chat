@@ -28,8 +28,8 @@ class Twitch:
 
     def sendMail(subject,content):
         try:
-            mail = yagmail.SMTP(user=">>>Sender<<<", password=">>>Sender Password<<<")
-            mail.send(to=">>>receiver<<<", subject=subject, contents=content)
+            mail = yagmail.SMTP(user=">>>Sender mail<<<", password=">>>Sender Password<<<")
+            mail.send(to=">>>receiver mail<<<", subject=subject, contents=content)
             print(f"\n%s - Mail has been sent\n%s" % (fg(7), attr(0)))
         except SMTPAuthenticationError:
             print(f"\n%sERROR --> Turn on 'Less secure app access' from your Google ACC%s" % (fg(5), attr(0)))
