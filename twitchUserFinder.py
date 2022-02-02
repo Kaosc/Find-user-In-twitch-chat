@@ -42,14 +42,17 @@ class Twitch:
         channels = []
         subject = f"THE USER CONFIRMED"
         content = f"{channels[count]}"
-        collectLink = f"https://twitch-tools.rootonline.de/followinglist_viewer.php?username={self.nickname}"
+
+        # [DEPRECATED] collectLink = f"https://twitch-tools.rootonline.de/followinglist_viewer.php?username={self.nickname}"
+        collectLink = f"https://www.twitchdatabase.com/following/{self.nickname}"
 
         self.browser = webdriver.Chrome("driver/chromedriver.exe", chrome_options=self.browserProfile)
         
         self.browser.get(collectLink)
         time.sleep(2)
 
-        channelEl = self.browser.find_elements(By.XPATH, '//*[@class="follower-card"]/td[1]/a')
+        # [DEPRECATED] channelEl = self.browser.find_elements(By.XPATH, '//*[@class="follower-card"]/td[1]/a')
+        channelEl = self.browser.find_elements(By.XPATH, '//*[@class="row following-list"]/div/a')
 
         for i in channelEl:
             channels.append(i.get_attribute("href"))
