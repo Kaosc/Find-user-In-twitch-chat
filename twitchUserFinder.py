@@ -40,8 +40,7 @@ class Twitch:
         count = 0
         founded = False
         channels = []
-        subject = f"THE USER CONFIRMED"
-        content = f"{channels[count]}"
+
 
         # [DEPRECATED] collectLink = f"https://twitch-tools.rootonline.de/followinglist_viewer.php?username={self.nickname}"
         collectLink = f"https://www.twitchdatabase.com/following/{self.nickname}"
@@ -86,6 +85,8 @@ class Twitch:
                 count+=1
         
             if(founded == True):
+                subject = f"THE USER CONFIRMED"
+                content = f"{channels[count]}"
                 Twitch.sendMail(subject,content)
                 break
         
