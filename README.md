@@ -7,7 +7,7 @@ Verify whether the user is on the viewer list on twitch channels and get notific
 - pip install yagmail
 
 
-# Current chrome driver version : 97
+# Current chrome driver version : 103
 
 - Download the latest chrome driver https://chromedriver.chromium.org/downloads
 - It must be the same version with in your computer.
