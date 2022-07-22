@@ -1,12 +1,9 @@
-from itertools import chain
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from colored import fg, attr
 import time
 import warnings
 import os
-from smtplib import SMTPAuthenticationError
-import yagmail
 import sys
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -26,14 +23,6 @@ class Twitch:
         self.browserProfile.add_experimental_option('excludeSwitches',['enable-logging'])
         self.browserProfile.add_experimental_option('prefs',{"intl.accept_languages":"en,en_US"})
 
-    def sendMail(subject,content):
-        try:
-            mail = yagmail.SMTP(user=">>>Sender mail<<<", password=">>>Sender Password<<<")
-            mail.send(to=">>>receiver mail<<<", subject=subject, contents=content)
-            print(f"\n%s - Mail has been sent\n%s" % (fg(7), attr(0)))
-        except SMTPAuthenticationError:
-            print(f"\n%sERROR --> Turn on 'Less secure app access' from your Google ACC%s" % (fg(5), attr(0)))
-
     def listCheck(self, nickname):
         os.system("cls")
         self.nickname = nickname
@@ -41,8 +30,6 @@ class Twitch:
         founded = False
         channels = []
 
-
-        # [DEPRECATED] collectLink = f"https://twitch-tools.rootonline.de/followinglist_viewer.php?username={self.nickname}"
         collectLink = f"https://www.twitchdatabase.com/following/{self.nickname}"
 
         self.browser = webdriver.Chrome("driver/chromedriver.exe", chrome_options=self.browserProfile)
@@ -50,8 +37,8 @@ class Twitch:
         self.browser.get(collectLink)
         time.sleep(2)
 
-        # [DEPRECATED] channelEl = self.browser.find_elements(By.XPATH, '//*[@class="follower-card"]/td[1]/a')
-        channelEl = self.browser.find_elements(By.XPATH, '//*[@class="row following-list"]/div/a')
+        row = self.browser.find_elements(By.CLASS_NAME, "row")
+        channelEl = row[2].find_elements(By.TAG_NAME, 'a')
 
         for i in channelEl:
             channels.append(i.get_attribute("href"))
@@ -62,7 +49,7 @@ class Twitch:
             time.sleep(1)
 
             try:
-                self.browser.find_element_by_xpath('//*[@aria-label="Users in Chat"]').click()
+                self.browser.find_element(By.XPATH,'//*[@aria-label="Community"]').click()
             except:
                 print(f"\n%s - CHANNEL OFFLINE %s" % (fg(1), attr(0)))
                 count+=1
@@ -70,13 +57,13 @@ class Twitch:
 
             print(f"%s\n - SEARCHING THE USER%s" % (fg(3), attr(0)))
             time.sleep(3)
-            self.browser.find_element_by_xpath('//*[@name="viewers-filter"]').send_keys(self.nickname.lower())
+            self.browser.find_element(By.XPATH,'//*[@placeholder="Filter"]').send_keys(self.nickname)
             print(f"%s - RESULTS ARE LOADING%s" % (fg(3), attr(0)))
             time.sleep(2)
 
             try:
-                userpath = f'//*[@data-username="{self.nickname}"]'
-                self.browser.find_element_by_xpath(userpath)
+                userpath = f'//*[@aria-label="Open details for {str(self.nickname)}"]'
+                self.browser.find_element(By.XPATH, userpath)
                 print(f"%s - USER CONFIRMED AT {channels[count]} %s" % (fg(2), attr(0)))
                 self.browser.close()
                 founded = True
@@ -85,9 +72,6 @@ class Twitch:
                 count+=1
         
             if(founded == True):
-                subject = f"THE USER CONFIRMED"
-                content = f"{channels[count]}"
-                Twitch.sendMail(subject,content)
                 break
         
         os.system("cls")
@@ -103,9 +87,6 @@ class Twitch:
         self.channel = channel
         self.browser = webdriver.Chrome("driver/chromedriver.exe", chrome_options=self.browserProfile)
 
-        subject = f"THE USER CONFIRMED AT {self.channel}"
-        content = f"https://www.twitch.tv/{self.channel}"
-
         while True:
             os.system("cls")
             self.browser.get(f"https://www.twitch.tv/{self.channel}")
@@ -113,7 +94,7 @@ class Twitch:
             time.sleep(2)
             
             try:
-                self.browser.find_element_by_xpath('//*[@aria-label="Users in Chat"]').click()
+                self.browser.find_element(By.XPATH,'//*[@aria-label="Community"]').click()
             except:
                 self.browser.close()
                 print(f"%s\n CHANNEL OFFLINE %s" % (fg(1), attr(0)))
@@ -121,14 +102,14 @@ class Twitch:
                 
             print(f"%s - SEARCHING THE USER%s" % (fg(3), attr(0)))
             time.sleep(2)
-            self.browser.find_element_by_xpath('//*[@name="viewers-filter"]').send_keys(self.nickname.lower())
+            self.browser.find_element(By.XPATH,'//*[@placeholder="Filter"]').send_keys(self.nickname)
             print(f"%s - RESULTS ARE LOADING%s" % (fg(3), attr(0)))
             time.sleep(2)
 
             try:
-                userpath = f'//*[@data-username="{self.nickname}"]'
-                self.browser.find_element_by_xpath(userpath)
-                print(f"%s - USER CONFIRMED %s" % (fg(2), attr(0)))
+                userpath = f'//*[@aria-label="Open details for {str(self.nickname)}"]'
+                self.browser.find_element(By.XPATH, userpath)
+                print(f"%s - USER CONFIRMED AT {channel} %s" % (fg(2), attr(0)))
                 self.browser.close()
                 founded = True
             except:
@@ -136,7 +117,6 @@ class Twitch:
                 count+=1
 
             if(founded == True):
-                Twitch.sendMail(subject,content)
                 break
 
             totalcount = str(count)
@@ -150,7 +130,7 @@ class Twitch:
 twitch = Twitch()
 
 while True:
-    print("")
+    print(f"%s\n The user nick name is case sensitive! %s\n" % (fg(1), attr(0)))
     print("%s - - - TWITCH USER FINDER - - - \n %s" % (fg(57), attr(0)))
     opt = input("""%s [1] - Find in following channels \n [2] - Search in a spesific channel (Loop) \n [3] - Exit \n\n Enter Number:  %s""" % (fg(57), attr(0)))
     if opt == "3":
