@@ -17,4 +17,4 @@ Verify whether the user is on the viewer list on twitch channels.
 
 
 ### Console Look
-![console look](https://i.ibb.co/FbytSLZ/1.png)
+![console look](./assets/console.png)
